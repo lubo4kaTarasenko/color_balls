@@ -21,11 +21,17 @@ code {
 }
 h1{
   opacity: 0.1;
+  margin-top: 340px;
+  cursor: default;
 }
-.balls{
+.ball{
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 40px;
+  height: 40px;
   border-radius: 100%;
-  border:1px solid black
+  border:2px solid black;
+  transition: all .3s ease;
+}
+.checked{
+  border:2px double red
 }
