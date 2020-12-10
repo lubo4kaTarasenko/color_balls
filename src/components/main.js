@@ -1,16 +1,19 @@
 import React from 'react'
+import { connect } from "react-redux";
+import { updateBalls } from "../redux/actions";
 
-export default class Main extends React.Component {    
+class Main extends React.Component {    
   constructor(props) {
     super(props);
+    //console.log(props)
     this.state = {
-      key: 0,
-      balls: []
+      key: 0
     }
   }
 
+ 
   render() {
-    const balls = this.state.balls
+    const balls = this.props.balls
     console.log(balls)
     return (
       <div className='cont'>
@@ -24,9 +27,9 @@ export default class Main extends React.Component {
           ))}
         </div>
         <div className='buttons'>
-            <button className="ringB" onClick={()=>{this.makeRing(this.state.balls, false)}}>Ring</button>
-            <button className="squareB" onClick={()=>{this.makeSquare(this.state.balls)}}>Square</button>
-            <button className="donutB" onClick={()=>{this.makeRing(this.state.balls, true)}}>Donut</button>
+            <button className="ringB" onClick={()=>{this.makeRing(this.props.balls, false)}}>Ring</button>
+            <button className="squareB" onClick={()=>{this.makeSquare(this.props.balls)}}>Square</button>
+            <button className="donutB" onClick={()=>{this.makeRing(this.props.balls, true)}}>Donut</button>
             <button className="add" onClick={()=>{this.addManyBalls()}}>Add 500</button>
         </div>
       </div>
@@ -48,21 +51,22 @@ export default class Main extends React.Component {
     ballsArr.forEach(ball => {
       const randomCoord = this.randomCircleCoord(donut)
       ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
-    this.setState({balls: ballsArr }) 
+      updateBalls(ballsArr); 
   }
 
   makeSquare(ballsArr){
     ballsArr.forEach(ball => {
       ball.x = (Math.random() * 300 + 550); ball.y = (Math.random() * 300 + 100); ball.checked = false})
-    this.setState({balls: ballsArr }) 
+      updateBalls(ballsArr); 
   }
 
   renderColorBall(x, y, id){   
     const randomColor = this.gRandomColor()
-    let ballsArr = this.state.balls    
+    let ballsArr = this.props.balls    
     const newKey = id + 1
     ballsArr.push({x: x, y: y, color: randomColor, index: id, checked: false })   
-    this.setState({balls: ballsArr, key: newKey }) 
+    this.setState({key: newKey }) 
+    updateBalls(ballsArr);
   }
 
   addManyBalls(){
@@ -79,10 +83,10 @@ export default class Main extends React.Component {
   }
   
   checkBall(ballId){
-    let ballsArr = this.state.balls       
+    let ballsArr = this.props.balls       
     ballsArr[ballId].checked = true  
     console.log(ballsArr, ballsArr[ballId])
-    this.setState({balls: ballsArr}) 
+    updateBalls(ballsArr);
   }
 
   gameClick(e){
@@ -98,13 +102,23 @@ export default class Main extends React.Component {
   }
 
   anyChecked(){
-   return (this.state.balls.filter(b => b.checked).length > 0)
+   return (this.props.balls.filter(b => b.checked).length > 0)
   }
 
   moveBall(x, y){    
-    let ballsArr = this.state.balls 
+    let ballsArr = this.props.balls 
     ballsArr.forEach(ball => { if(ball.checked) {ball.x = x; ball.y = y; ball.checked = false} })
-    this.setState({balls: ballsArr }) 
+    updateBalls(ballsArr); 
   }
-
 }
+
+const mapStateToProps = (state) => {
+  return {
+    balls: state.balls.balls
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { updateBalls }
+)(Main);

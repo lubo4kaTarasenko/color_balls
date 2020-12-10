@@ -1,4 +1,4 @@
-import Main from "./app/components/main";
+import Main from "./components/main";
 
 function App() {
   return (
