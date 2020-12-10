@@ -24,46 +24,29 @@ export default class Main extends React.Component {
           ))}
         </div>
         <div className='buttons'>
-            <button className="ringB" onClick={()=>{this.makeRing(this.state.balls)}}>Ring</button>
+            <button className="ringB" onClick={()=>{this.makeRing(this.state.balls, false)}}>Ring</button>
             <button className="squareB" onClick={()=>{this.makeSquare(this.state.balls)}}>Square</button>
-            <button className="donutB" onClick={()=>{this.makeDonut(this.state.balls)}}>Donut</button>
-            <button className="add" onClick={()=>{this.addManyBalls()}}>Add 1000</button>
+            <button className="donutB" onClick={()=>{this.makeRing(this.state.balls, true)}}>Donut</button>
+            <button className="add" onClick={()=>{this.addManyBalls()}}>Add 500</button>
         </div>
       </div>
     )
   }
-  randomCoord(){
 
-  }
-  randomDonutCoord(){
+  randomCircleCoord(donut){
     const x = Math.random() * 300 + 550
     const y = Math.random() * 300 + 100    
     const dx = 700 - x
     const dy = 250 - y
     const D = Math.sqrt(dx*dx + dy*dy)
-    if (D > 150 || D < 70) return this.randomDonutCoord()
-    return [x, y]
-  }
-  makeDonut(ballsArr){
-    ballsArr.forEach(ball => {
-      const randomCoord = this.randomDonutCoord()
-      ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
-    this.setState({balls: ballsArr }) 
-  }
-
-  randomCircleCoord(){
-    const x = Math.random() * 300 + 550
-    const y = Math.random() * 300 + 100    
-    const dx = 700 - x
-    const dy = 250 - y
-    const D = Math.sqrt(dx*dx + dy*dy)
-    if (D > 150) return this.randomCircleCoord()
+    if (D > 150) return this.randomCircleCoord(donut)
+    if (donut && D < 70) return this.randomCircleCoord(donut)
     return [x, y]
   }
 
-  makeRing(ballsArr){ 
+  makeRing(ballsArr, donut){ 
     ballsArr.forEach(ball => {
-      const randomCoord = this.randomCircleCoord()
+      const randomCoord = this.randomCircleCoord(donut)
       ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
     this.setState({balls: ballsArr }) 
   }
@@ -84,7 +67,7 @@ export default class Main extends React.Component {
 
   addManyBalls(){
     let id = this.state.key
-    for(let i = 0; i < 1000; i++){
+    for(let i = 0; i < 500; i++){
       this.renderColorBall(180, 200, id)
       id += 1     
      }

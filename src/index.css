@@ -30,7 +30,7 @@ h1{
   height: 40px;
   border-radius: 100%;
   border:2px solid  blueviolet;
-  transition: all .3s ease;
+  transition: all .5s ease;
 }
 .checked{
   border:2px double red
