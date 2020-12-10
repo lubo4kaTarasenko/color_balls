@@ -5,8 +5,7 @@ export default class Main extends React.Component {
     super(props);
     this.state = {
       key: 0,
-      balls: [], 
-      figure: []
+      balls: []
     }
   }
 
@@ -16,7 +15,6 @@ export default class Main extends React.Component {
     return (
       <div className='cont'>
         <div id='game_field' onClick={(e)=>{this.gameClick(e)}}>
-          <div className='figure'></div>
           <h1 id='h'>Click you`r mouse here</h1>
           { balls.map(ball => (               
               <div key={ball.index} className={ `ball ${ball.checked ? 'checked' : ''}` }
@@ -26,41 +24,51 @@ export default class Main extends React.Component {
           ))}
         </div>
         <div className='buttons'>
-            <button className="ringB" onClick={()=>{this.makeRing()}}>Ring</button>
-            <button className="squareB" onClick={()=>{this.makeSquare()}}>Square</button>
-            <button className="danateB" onClick={()=>{this.makeDonate()}}>Donate</button>
+            <button className="ringB" onClick={()=>{this.makeRing(this.state.balls)}}>Ring</button>
+            <button className="squareB" onClick={()=>{this.makeSquare(this.state.balls)}}>Square</button>
+            <button className="donutB" onClick={()=>{this.makeDonut(this.state.balls)}}>Donut</button>
             <button className="add" onClick={()=>{this.addManyBalls()}}>Add 1000</button>
         </div>
       </div>
     )
   }
-  makeDonate(){}
-
   randomCoord(){
+
+  }
+  randomDonutCoord(){
     const x = Math.random() * 300 + 550
-    const y = Math.random() * 300 + 100
-    
+    const y = Math.random() * 300 + 100    
     const dx = 700 - x
     const dy = 250 - y
     const D = Math.sqrt(dx*dx + dy*dy)
-    console.log(x, y, D)
-    if (D > 150){
-      console.log('retry')
-      return this.randomCoord()
-    }
+    if (D > 150 || D < 70) return this.randomDonutCoord()
     return [x, y]
   }
-
-  makeRing(){ 
-    let ballsArr = this.state.balls 
+  makeDonut(ballsArr){
     ballsArr.forEach(ball => {
-      const randomCoord = this.randomCoord()
+      const randomCoord = this.randomDonutCoord()
       ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
     this.setState({balls: ballsArr }) 
   }
 
-  makeSquare(){
-    let ballsArr = this.state.balls 
+  randomCircleCoord(){
+    const x = Math.random() * 300 + 550
+    const y = Math.random() * 300 + 100    
+    const dx = 700 - x
+    const dy = 250 - y
+    const D = Math.sqrt(dx*dx + dy*dy)
+    if (D > 150) return this.randomCircleCoord()
+    return [x, y]
+  }
+
+  makeRing(ballsArr){ 
+    ballsArr.forEach(ball => {
+      const randomCoord = this.randomCircleCoord()
+      ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
+    this.setState({balls: ballsArr }) 
+  }
+
+  makeSquare(ballsArr){
     ballsArr.forEach(ball => {
       ball.x = (Math.random() * 300 + 550); ball.y = (Math.random() * 300 + 100); ball.checked = false})
     this.setState({balls: ballsArr }) 
