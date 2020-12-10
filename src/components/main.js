@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from "react-redux";
 import { updateBalls } from "../redux/actions";
+import { UPDATE_BALLS } from '../redux/actionTypes';
+import store from "../redux/store";
 
 class Main extends React.Component {    
   constructor(props) {
@@ -11,6 +13,9 @@ class Main extends React.Component {
     }
   }
 
+  dispatchUpdateBalls(ballsArr){
+    store.dispatch({ type: 'UPDATE_BALLS', ballsArr: ballsArr.map(x => x) } );
+  }
  
   render() {
     const balls = this.props.balls
@@ -51,13 +56,14 @@ class Main extends React.Component {
     ballsArr.forEach(ball => {
       const randomCoord = this.randomCircleCoord(donut)
       ball.x = randomCoord[0]; ball.y = randomCoord[1]; ball.checked = false})
-      updateBalls(ballsArr); 
+      this.dispatchUpdateBalls(ballsArr)
   }
 
   makeSquare(ballsArr){
     ballsArr.forEach(ball => {
-      ball.x = (Math.random() * 300 + 550); ball.y = (Math.random() * 300 + 100); ball.checked = false})
-      updateBalls(ballsArr); 
+      ball.x = (Math.random() * 300 + 550); ball.y = (Math.random() * 300 + 100); ball.checked = false
+    })
+    this.dispatchUpdateBalls(ballsArr)
   }
 
   renderColorBall(x, y, id){   
@@ -66,7 +72,7 @@ class Main extends React.Component {
     const newKey = id + 1
     ballsArr.push({x: x, y: y, color: randomColor, index: id, checked: false })   
     this.setState({key: newKey }) 
-    updateBalls(ballsArr);
+    this.dispatchUpdateBalls(ballsArr)
   }
 
   addManyBalls(){
@@ -85,8 +91,7 @@ class Main extends React.Component {
   checkBall(ballId){
     let ballsArr = this.props.balls       
     ballsArr[ballId].checked = true  
-    console.log(ballsArr, ballsArr[ballId])
-    updateBalls(ballsArr);
+    this.dispatchUpdateBalls(ballsArr)
   }
 
   gameClick(e){
@@ -108,7 +113,7 @@ class Main extends React.Component {
   moveBall(x, y){    
     let ballsArr = this.props.balls 
     ballsArr.forEach(ball => { if(ball.checked) {ball.x = x; ball.y = y; ball.checked = false} })
-    updateBalls(ballsArr); 
+    this.dispatchUpdateBalls(ballsArr)
   }
 }
 

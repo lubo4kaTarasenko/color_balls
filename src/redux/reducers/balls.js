@@ -5,9 +5,10 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
+  console.log(state, action)
   switch (action.type) {
     case UPDATE_BALLS: {
-      const { ballsArr } = action.payload;
+      const ballsArr = action.ballsArr;
       return {
         ...state,
         balls: ballsArr
