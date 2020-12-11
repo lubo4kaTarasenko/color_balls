@@ -81,8 +81,9 @@ class Main extends React.Component {
   }
   
   checkBall(ballId){
-    let ballsArr = this.props.balls       
-    ballsArr[ballId].checked = true  
+    let ballsArr = this.props.balls  
+    const ball = ballsArr.filter(e => e.index == ballId)[0]    
+    ball.checked = true  
     this.dispatchUpdateBalls(ballsArr)
   }
 
