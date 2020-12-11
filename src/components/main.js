@@ -4,7 +4,8 @@ import { updateBalls } from "../redux/actions";
 
 class Main extends React.Component {    
   constructor(props) {
-    super(props);  
+    super(props);
+    this.id = 0  
   }
 
   dispatchUpdateBalls(ballsArr){
@@ -17,7 +18,7 @@ class Main extends React.Component {
     return (
       <div className='cont'>
         <div id='game_field' onClick={(e)=>{this.gameClick(e)}}>
-          <h1 id='h'>Click you`r mouse here</h1>
+          <h1 id='h'>Click your mouse here</h1>
           { balls.map(ball => (               
               <div key={ball.index} className={ `ball ${ball.checked ? 'checked' : ''}` }
                 style={ {top: ball.y, left: ball.x, background: ball.color } }
@@ -62,13 +63,13 @@ class Main extends React.Component {
 
   renderColorBall(x, y, id){   
     const randomColor = this.gRandomColor()
-    let ballsArr = this.props.balls    
+    let ballsArr = this.props.balls        
     ballsArr.push({x: x, y: y, color: randomColor, index: id, checked: false })   
     this.dispatchUpdateBalls(ballsArr)
   }
 
   addManyBalls(){
-    let id = ((this.props.balls[this.props.balls.length-1] || {index: 0}).index + 1)
+    let id = this.returnId()
     for(let i = 0; i < 500; i++){     
       this.renderColorBall(180, 200, id)
       id += 1          
@@ -85,12 +86,18 @@ class Main extends React.Component {
     this.dispatchUpdateBalls(ballsArr)
   }
 
+  returnId(){
+    let id = 0
+    this.props.balls.forEach((ball) => {if (ball.index > id) id = ball.index} )
+    return id +1
+  }
+
   gameClick(e){
     const x = e.pageX  
     const y = e.pageY
     if(e.target.classList.contains('ball')) return
     if (!this.anyChecked()){
-      let id = ((this.props.balls[this.props.balls.length-1] || {index: 0}).index + 1)
+      let id = this.returnId()
       this.renderColorBall(x, y, id)
     }
     else{
