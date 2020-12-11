@@ -8,7 +8,7 @@ export default function(state = initialState, action) {
   console.log(state, action)
   switch (action.type) {
     case UPDATE_BALLS: {
-      const ballsArr = action.ballsArr;
+      const ballsArr = action.payload.ballsArr;
       return {
         ...state,
         balls: ballsArr

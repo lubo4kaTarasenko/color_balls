@@ -1,20 +1,14 @@
 import React from 'react'
 import { connect } from "react-redux";
 import { updateBalls } from "../redux/actions";
-import { UPDATE_BALLS } from '../redux/actionTypes';
-import store from "../redux/store";
 
 class Main extends React.Component {    
   constructor(props) {
-    super(props);
-    //console.log(props)
-    this.state = {
-      key: 0
-    }
+    super(props);  
   }
 
   dispatchUpdateBalls(ballsArr){
-    store.dispatch({ type: 'UPDATE_BALLS', ballsArr: ballsArr.map(x => x) } );
+    this.props.updateBalls(ballsArr.map(x => x))
   }
  
   render() {
@@ -69,19 +63,16 @@ class Main extends React.Component {
   renderColorBall(x, y, id){   
     const randomColor = this.gRandomColor()
     let ballsArr = this.props.balls    
-    const newKey = id + 1
     ballsArr.push({x: x, y: y, color: randomColor, index: id, checked: false })   
-    this.setState({key: newKey }) 
     this.dispatchUpdateBalls(ballsArr)
   }
 
   addManyBalls(){
-    let id = this.state.key
-    for(let i = 0; i < 500; i++){
+    let id = ((this.props.balls[this.props.balls.length-1] || {index: 0}).index + 1)
+    for(let i = 0; i < 500; i++){     
       this.renderColorBall(180, 200, id)
-      id += 1     
+      id += 1          
      }
-     this.setState({key: id})
   }
 
   gRandomColor(){
@@ -99,7 +90,8 @@ class Main extends React.Component {
     const y = e.pageY
     if(e.target.classList.contains('ball')) return
     if (!this.anyChecked()){
-      this.renderColorBall(x, y, this.state.key)
+      let id = ((this.props.balls[this.props.balls.length-1] || {index: 0}).index + 1)
+      this.renderColorBall(x, y, id)
     }
     else{
       this.moveBall(x, y)
